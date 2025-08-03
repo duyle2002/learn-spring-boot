@@ -1,4 +1,4 @@
-package duy.com.learn_spring_boot;
+package duy.com.learnspringboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

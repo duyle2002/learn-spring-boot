@@ -1,4 +1,4 @@
-package duy.com.learn_spring_boot.utils;
+package duy.com.learnspringboot.utils;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

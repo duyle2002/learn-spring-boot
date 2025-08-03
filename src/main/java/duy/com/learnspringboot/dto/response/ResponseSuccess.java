@@ -1,4 +1,4 @@
-package duy.com.learn_spring_boot.dto.response;
+package duy.com.learnspringboot.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

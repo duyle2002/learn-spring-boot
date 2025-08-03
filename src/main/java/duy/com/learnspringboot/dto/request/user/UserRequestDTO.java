@@ -1,13 +1,12 @@
-package duy.com.learn_spring_boot.dto.request.user;
+package duy.com.learnspringboot.dto.request.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import duy.com.learn_spring_boot.utils.EnumPattern;
-import duy.com.learn_spring_boot.utils.PhoneNumber;
-import duy.com.learn_spring_boot.utils.UserStatus;
+import duy.com.learnspringboot.utils.EnumPattern;
+import duy.com.learnspringboot.utils.PhoneNumber;
+import duy.com.learnspringboot.utils.UserStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package duy.com.learn_spring_boot.dto.response;
+package duy.com.learnspringboot.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

@@ -1,4 +1,4 @@
-package duy.com.learn_spring_boot.utils;
+package duy.com.learnspringboot.utils;
 
 public enum UserStatus {
     ACTIVE,

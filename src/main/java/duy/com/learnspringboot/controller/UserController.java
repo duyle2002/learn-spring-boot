@@ -1,9 +1,9 @@
-package duy.com.learn_spring_boot.controller;
+package duy.com.learnspringboot.controller;
 
-import duy.com.learn_spring_boot.dto.request.user.UserRequestDTO;
-import duy.com.learn_spring_boot.dto.response.ResponseData;
-import duy.com.learn_spring_boot.dto.response.ResponseError;
-import duy.com.learn_spring_boot.utils.UserStatus;
+import duy.com.learnspringboot.dto.request.user.UserRequestDTO;
+import duy.com.learnspringboot.dto.response.ResponseData;
+import duy.com.learnspringboot.dto.response.ResponseError;
+import duy.com.learnspringboot.utils.UserStatus;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

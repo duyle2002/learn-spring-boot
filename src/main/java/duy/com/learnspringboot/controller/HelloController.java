@@ -1,4 +1,4 @@
-package duy.com.learn_spring_boot.controller;
+package duy.com.learnspringboot.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
