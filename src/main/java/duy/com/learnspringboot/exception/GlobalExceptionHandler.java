@@ -1,71 +1,55 @@
 package duy.com.learnspringboot.exception;
 
-import jakarta.validation.ConstraintViolationException;
+import duy.com.learnspringboot.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = { HttpMessageNotReadableException.class, MethodArgumentNotValidException.class, ConstraintViolationException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleHttpMessageNotReadableException(Exception e, WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponse.setTimestamp(new Date());
-        errorResponse.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
-        errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
+    /**
+     * Generic handler for all uncaught exceptions
+     */
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ApiResponse<?>> handleGeneralException(Exception ex) {
+        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+        ApiResponse<?> apiResponse = new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
+        return ResponseEntity.internalServerError().body(apiResponse);
+    }
 
-        String message = e.getMessage();
+    @ExceptionHandler(value = BadRequestException.class)
+    public ResponseEntity<ApiResponse<?>> handleBadRequestException(BadRequestException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        ApiResponse<?> apiResponse = new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
 
-        if (e instanceof HttpMessageNotReadableException) {
-            message = message.substring(message.indexOf("JSON parse error:"));
-        } else if (e instanceof MethodArgumentNotValidException) {
-            int startIndex = message.lastIndexOf("[");
-            int endIndex = message.lastIndexOf("]");
-            message = message.substring(startIndex + 1, endIndex - 1);
-        } else if (e instanceof ConstraintViolationException) {
-            int startIndex = message.indexOf("[");
-            int endIndex = message.indexOf("]");
-            message = message.substring(startIndex + 1, endIndex + 1);
-        }
-
-        errorResponse.setMessage(message);
-
-
-        return errorResponse;
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleResourceNotFoundException(Exception e, WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
-        errorResponse.setTimestamp(new Date());
-        errorResponse.setError(HttpStatus.NOT_FOUND.getReasonPhrase());
-        errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
+    public ResponseEntity<ApiResponse<?>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        ErrorCode errorCode = ex.getErrorCode();
+        ApiResponse<?> apiResponse = new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
 
-        errorResponse.setMessage(e.getMessage());
-        return errorResponse;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
     }
 
-//    @ExceptionHandler(value = Exception.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorResponse handleException(Exception e, WebRequest request) {
-//        ErrorResponse errorResponse = new ErrorResponse();
-//        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        errorResponse.setTimestamp(new Date());
-//        errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-//        errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
-//        errorResponse.setMessage("An unexpected error occurred");
-//
-//        return errorResponse;
-//    }
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach((fieldError) -> {
+            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        });
+
+        ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
+
+        ApiResponse<?> apiResponse = new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
+        apiResponse.setErrors(errors);
+        return  ResponseEntity.badRequest().body(apiResponse);
+    }
 }

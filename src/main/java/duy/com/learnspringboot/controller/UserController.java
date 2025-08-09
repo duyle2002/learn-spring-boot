@@ -1,20 +1,15 @@
 package duy.com.learnspringboot.controller;
 
 import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
-import duy.com.learnspringboot.dto.request.user.UserRequestDTO;
 import duy.com.learnspringboot.dto.request.user.UserUpdateRequest;
-import duy.com.learnspringboot.dto.response.ResponseData;
-import duy.com.learnspringboot.dto.response.ResponseError;
+import duy.com.learnspringboot.dto.response.ApiResponse;
 import duy.com.learnspringboot.entity.User;
 import duy.com.learnspringboot.service.UserService;
-import duy.com.learnspringboot.utils.UserStatus;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +24,9 @@ public class UserController {
     }
 
     @PostMapping()
-    public User createUser(@RequestBody UserCreationRequest userCreationRequest) {
-        return this.userService.createUser(userCreationRequest);
+    public ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest userCreationRequest) {
+        User createdUser = this.userService.createUser(userCreationRequest);
+        return new ApiResponse<>(HttpStatus.OK.value(), createdUser);
     }
 
     @GetMapping()

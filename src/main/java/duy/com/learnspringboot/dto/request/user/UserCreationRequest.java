@@ -1,12 +1,20 @@
 package duy.com.learnspringboot.dto.request.user;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class UserCreationRequest {
     private String firstName;
     private String lastName;
+
+    @Size(min = 4, message = "User name must be at least 4 characters")
     private String username;
+
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
+
     private LocalDate dateOfBirth;
 
     public String getFirstName() {

@@ -1,9 +1,9 @@
 package duy.com.learnspringboot.exception;
 
-public class ResourceNotFoundException extends RuntimeException {
+public class BadRequestException extends RuntimeException {
     private ErrorCode errorCode;
 
-    public ResourceNotFoundException(ErrorCode errorCode) {
+    public BadRequestException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }

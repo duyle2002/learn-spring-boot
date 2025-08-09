@@ -1,9 +1,10 @@
 package duy.com.learnspringboot.service;
 
 import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
-import duy.com.learnspringboot.dto.request.user.UserRequestDTO;
 import duy.com.learnspringboot.dto.request.user.UserUpdateRequest;
 import duy.com.learnspringboot.entity.User;
+import duy.com.learnspringboot.exception.BadRequestException;
+import duy.com.learnspringboot.exception.ErrorCode;
 import duy.com.learnspringboot.exception.ResourceNotFoundException;
 import duy.com.learnspringboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,6 @@ public class UserService {
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    public UserRequestDTO getUserById(int userId) {
-        throw new ResourceNotFoundException("User not found");
     }
 
     public User createUser(UserCreationRequest request) {
@@ -42,7 +39,7 @@ public class UserService {
 
     public User getUserById(UUID userId) {
         return this.userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
     public User updateUser(UUID userId, UserUpdateRequest request) {
