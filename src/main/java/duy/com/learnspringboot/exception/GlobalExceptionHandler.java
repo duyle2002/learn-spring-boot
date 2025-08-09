@@ -56,16 +56,16 @@ public class GlobalExceptionHandler {
         return errorResponse;
     }
 
-    @ExceptionHandler(value = Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(Exception e, WebRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorResponse.setTimestamp(new Date());
-        errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-        errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
-        errorResponse.setMessage("An unexpected error occurred");
-
-        return errorResponse;
-    }
+//    @ExceptionHandler(value = Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ErrorResponse handleException(Exception e, WebRequest request) {
+//        ErrorResponse errorResponse = new ErrorResponse();
+//        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+//        errorResponse.setTimestamp(new Date());
+//        errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+//        errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
+//        errorResponse.setMessage("An unexpected error occurred");
+//
+//        return errorResponse;
+//    }
 }

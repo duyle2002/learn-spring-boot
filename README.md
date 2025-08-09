@@ -54,7 +54,7 @@ src/
     │       ├── utils/            # Helper and utility classes (e.g. converters, formatters)
     │       └── LearnSpringBootApplication.java  # Main entry point of the Spring Boot application
     └── resources/
-        ├── application.properties       # Application configuration (DB, ports, etc.)
+        ├── application.yaml       # Application configuration (DB, ports, etc.)
         ├── static/               # Static web assets (CSS, JS, images, etc.)
         └── templates/            # Template files (Thymeleaf, FreeMarker, etc. if used)
 ```
