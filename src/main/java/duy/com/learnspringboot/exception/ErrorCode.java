@@ -3,6 +3,7 @@ package duy.com.learnspringboot.exception;
 public enum ErrorCode {
     VALIDATION_ERROR(1, "Validation failed"),
 
+    UNAUTHORIZED(401, "Unauthorized"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
 
     // user error code, from 1001 to 1999

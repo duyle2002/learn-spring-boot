@@ -1,8 +1,11 @@
 package duy.com.learnspringboot.controller;
 
+import com.nimbusds.jose.JOSEException;
 import duy.com.learnspringboot.dto.request.authentication.AuthenticationRequest;
+import duy.com.learnspringboot.dto.request.authentication.VerifyTokenRequest;
 import duy.com.learnspringboot.dto.response.ApiResponse;
 import duy.com.learnspringboot.dto.response.authentication.AuthenticationResponse;
+import duy.com.learnspringboot.dto.response.authentication.VerifyTokenResponse;
 import duy.com.learnspringboot.service.IAuthenticationService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -23,11 +28,21 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ApiResponse<AuthenticationResponse> login(@RequestBody @Valid AuthenticationRequest authenticationRequest){
-        boolean isAuthenticated = authenticationService.authenticate(authenticationRequest);
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse(isAuthenticated);
+        AuthenticationResponse result = authenticationService.authenticate(authenticationRequest);
         return ApiResponse.<AuthenticationResponse>builder()
                 .code(HttpStatus.OK.value())
-                .data(authenticationResponse)
+                .data(result)
                 .build();
     }
+
+    @PostMapping("/verify-token")
+    public ApiResponse<VerifyTokenResponse> verifyToken(@RequestBody @Valid VerifyTokenRequest verifyTokenRequest) throws ParseException, JOSEException {
+        VerifyTokenResponse response = authenticationService.verifyToken(verifyTokenRequest);
+
+        return ApiResponse.<VerifyTokenResponse>builder()
+                .code(HttpStatus.OK.value())
+                .data(response)
+                .build();
+    }
+
 }

@@ -9,3 +9,6 @@ spring:
       hibernate:
           ddl-auto: update
       show-sql: true
+
+jwt:
+  secretKey: "f42f6dfc37a0a26ae64ee17af1f9b6a7201bf5e060e0d24b46cc42b24ae4f7c6"
