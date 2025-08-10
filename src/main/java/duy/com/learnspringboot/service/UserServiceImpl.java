@@ -11,6 +11,8 @@ import duy.com.learnspringboot.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +28,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserResponse createUser(UserCreationRequest request) {
         User user = this.userMapper.toUser(request);
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         User createdUser = this.userRepository.save(user);
         return this.userMapper.toUserResponse(createdUser);
