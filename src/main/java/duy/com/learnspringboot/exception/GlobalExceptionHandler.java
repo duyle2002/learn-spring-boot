@@ -1,6 +1,7 @@
 package duy.com.learnspringboot.exception;
 
 import duy.com.learnspringboot.dto.response.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,56 +12,65 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     /**
      * Generic handler for all uncaught exceptions
      */
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<?>> handleGeneralException(Exception ex) {
-        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-        ApiResponse<?> apiResponse = new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
-        return ResponseEntity.internalServerError().body(apiResponse);
+        return buildErrorResponse(ex, ErrorCode.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(value = BadRequestException.class)
+    @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiResponse<?>> handleBadRequestException(BadRequestException ex) {
-        ErrorCode errorCode = ex.getErrorCode();
-        ApiResponse<?> apiResponse = new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
-
-        return ResponseEntity.badRequest().body(apiResponse);
+        return buildErrorResponse(ex, ex.getErrorCode(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = ResourceNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<?>> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        ErrorCode errorCode = ex.getErrorCode();
-        ApiResponse<?> apiResponse = new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        return buildErrorResponse(ex, ex.getErrorCode(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach((fieldError) -> {
-            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-        });
+        ex.getBindingResult().getFieldErrors()
+                .forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
 
         ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
 
+        log.error("Validation failed: {}", errors);
         ApiResponse<?> apiResponse = new ApiResponse<>(errorCode.getCode(), errorCode.getMessage());
         apiResponse.setErrors(errors);
-        return  ResponseEntity.badRequest().body(apiResponse);
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(value = InvalidCredentialsException.class)
+    @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ApiResponse<?>> handleInvalidCredentialsException(InvalidCredentialsException ex) {
-        ErrorCode errorCode = ex.getErrorCode();
+        return buildErrorResponse(ex, ex.getErrorCode(), HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
+     * Common method to log and build error responses
+     */
+    private ResponseEntity<ApiResponse<?>> buildErrorResponse(Exception ex, ErrorCode errorCode, HttpStatus status) {
+        // Error log with stack trace for developers
+        log.error("Exception caught [{}]: Code={}, Message={}, Details={}",
+                ex.getClass().getSimpleName(),
+                errorCode.getCode(),
+                errorCode.getMessage(),
+                ex.getMessage(),
+                ex // logs stack trace
+        );
+
+        // Build API response for clients
         ApiResponse<?> apiResponse = ApiResponse.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .build();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(apiResponse);
+
+        return ResponseEntity.status(status).body(apiResponse);
     }
 }
