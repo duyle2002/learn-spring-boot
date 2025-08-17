@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -17,10 +18,12 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private LocalDate dateOfBirth;
+    UUID id;
+    String username;
+    String password;
+    String firstName;
+    String lastName;
+    LocalDate dateOfBirth;
+
+    Set<String> roles;
 }

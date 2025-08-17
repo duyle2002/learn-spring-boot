@@ -7,7 +7,8 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
 
     // user error code, from 1001 to 1999
-    USER_NOT_FOUND(1001, "User not found");
+    USER_NOT_FOUND(1001, "User not found"),
+    USER_ALREADY_EXISTS(1002, "User already exists");
 
 
     private int code;

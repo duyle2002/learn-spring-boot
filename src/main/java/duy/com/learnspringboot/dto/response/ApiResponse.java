@@ -3,6 +3,7 @@ package duy.com.learnspringboot.dto.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
-    private int code;
+    private int code = HttpStatus.OK.value();
     private String message;
     private T data;
     private Map<String, String> errors;
