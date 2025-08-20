@@ -1,4 +1,4 @@
-package duy.com.learnspringboot.service;
+package duy.com.learnspringboot.service.impl;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -15,21 +15,21 @@ import duy.com.learnspringboot.exception.ErrorCode;
 import duy.com.learnspringboot.exception.InvalidCredentialsException;
 import duy.com.learnspringboot.exception.ResourceNotFoundException;
 import duy.com.learnspringboot.repository.UserRepository;
+import duy.com.learnspringboot.service.IAuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
-import java.util.Collections;
 import java.util.Date;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -107,10 +107,17 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
 
     private String buildScope(User user) {
-        StringJoiner stringJoiner = new StringJoiner(" ");
-        if (!CollectionUtils.isEmpty(user.getRoles())) {
-            user.getRoles().forEach(stringJoiner::add);
+        if (CollectionUtils.isEmpty(user.getRoles())) {
+            return "";
         }
-        return stringJoiner.toString();
+        return user.getRoles().stream()
+                .flatMap(role -> {
+                    StringJoiner scopes = new StringJoiner(" ");
+                    scopes.add("ROLE_" + role.getName());
+                    role.getPermissions().forEach(permission -> scopes.add(permission.getName()));
+
+                    return scopes.toString().lines();
+                })
+                .collect(Collectors.joining(" "));
     }
 }

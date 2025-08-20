@@ -1,7 +1,8 @@
 package duy.com.learnspringboot.configuration;
 
+import duy.com.learnspringboot.entity.Role;
 import duy.com.learnspringboot.entity.User;
-import duy.com.learnspringboot.enums.Role;
+import duy.com.learnspringboot.repository.RoleRepository;
 import duy.com.learnspringboot.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @Configuration
@@ -20,17 +22,18 @@ import java.util.HashSet;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
+    RoleRepository roleRepository;
 
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
            if (userRepository.findByUsername("admin").isEmpty()) {
-               var roles = new HashSet<String>();
-               roles.add(Role.ADMIN.name());
+               var adminRole = roleRepository.findById("ADMIN")
+                       .orElseGet(() -> roleRepository.save(Role.builder().name("ADMIN").build()));
                User user = User.builder()
                        .username("admin".toLowerCase())
                        .password(passwordEncoder.encode("admin"))
-                       .roles(roles)
+                       .roles(Set.of(adminRole))
                        .build();
 
                userRepository.save(user);

@@ -5,7 +5,6 @@ import duy.com.learnspringboot.dto.request.user.UserUpdateRequest;
 import duy.com.learnspringboot.dto.response.ApiResponse;
 import duy.com.learnspringboot.dto.response.user.UserResponse;
 import duy.com.learnspringboot.service.IUserService;
-import duy.com.learnspringboot.service.UserServiceImpl;
 import duy.com.learnspringboot.utils.SecurityExpressions;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -14,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
+//    @PreAuthorize("hasAuthority('CREATE_POST')")
     public ApiResponse<UserResponse> getUser(@PathVariable UUID userId) {
         UserResponse userResponse = this.userService.getUserById(userId);
         return ApiResponse.<UserResponse>builder()
@@ -68,9 +67,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ApiResponse<UserResponse> deleteUser(@PathVariable UUID userId) {
+    public ApiResponse<Void> deleteUser(@PathVariable UUID userId) {
         this.userService.deleteUser(userId);
-        return ApiResponse.<UserResponse>builder()
+        return ApiResponse.<Void>builder()
                 .code(HttpStatus.NO_CONTENT.value())
                 .message("Deleted user successfully")
                 .build();

@@ -1,27 +1,23 @@
-package duy.com.learnspringboot.dto.response.user;
+package duy.com.learnspringboot.dto.response.role;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import duy.com.learnspringboot.entity.Role;
+import duy.com.learnspringboot.entity.Permission;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserResponse {
-    UUID id;
-    String username;
-    String firstName;
-    String lastName;
-    LocalDate dateOfBirth;
-    Set<Role> roles;
+public class RoleResponse {
+    String name;
+    String description;
+
+    Set<Permission> permissions;
 }

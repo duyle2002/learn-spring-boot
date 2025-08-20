@@ -25,5 +25,6 @@ public class User {
     String lastName;
     LocalDate dateOfBirth;
 
-    Set<String> roles;
+    @ManyToMany
+    Set<Role> roles;
 }

@@ -1,0 +1,25 @@
+package duy.com.learnspringboot.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
+
+@Entity(name = "roles")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Role {
+    @Id
+    String name;
+    String description;
+
+    @ManyToMany
+    Set<Permission> permissions;
+}

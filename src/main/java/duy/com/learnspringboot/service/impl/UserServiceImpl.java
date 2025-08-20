@@ -1,15 +1,17 @@
-package duy.com.learnspringboot.service;
+package duy.com.learnspringboot.service.impl;
 
 import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
 import duy.com.learnspringboot.dto.request.user.UserUpdateRequest;
 import duy.com.learnspringboot.dto.response.user.UserResponse;
+import duy.com.learnspringboot.entity.Role;
 import duy.com.learnspringboot.entity.User;
-import duy.com.learnspringboot.enums.Role;
 import duy.com.learnspringboot.exception.BadRequestException;
 import duy.com.learnspringboot.exception.ErrorCode;
 import duy.com.learnspringboot.exception.ResourceNotFoundException;
 import duy.com.learnspringboot.mapper.UserMapper;
+import duy.com.learnspringboot.repository.RoleRepository;
 import duy.com.learnspringboot.repository.UserRepository;
+import duy.com.learnspringboot.service.IUserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -27,27 +30,29 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements IUserService {
     UserRepository userRepository;
+    RoleRepository roleRepository;
+
     UserMapper userMapper;
 
     PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponse createUser(UserCreationRequest request) {
-        boolean exisingUserByUserName = userRepository.existsByUsername(request.getUsername().toLowerCase());
-
-        if (exisingUserByUserName) {
+        String username = request.getUsername().toLowerCase();
+        if (userRepository.existsByUsername(username)) {
             throw new BadRequestException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
-        User user = this.userMapper.toUser(request);
-
+        User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
-        user.setRoles(roles);
 
-        User createdUser = this.userRepository.save(user);
-        return this.userMapper.toUserResponse(createdUser);
+        Role userRole = roleRepository.findById("USER")
+                .orElseGet(() -> roleRepository.save(Role.builder().name("USER").build()));
+
+        user.setRoles(Set.of(userRole));
+
+        User createdUser = userRepository.save(user);
+        return userMapper.toUserResponse(createdUser);
     }
 
     @Override
@@ -64,13 +69,16 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserResponse updateUser(UUID userId, UserUpdateRequest request) {
-        User existingUser = this.userRepository.findById(userId)
+        User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        this.userMapper.updateUser(existingUser, request);
+        userMapper.updateUser(existingUser, request);
 
-        existingUser = this.userRepository.save(existingUser);
-        return this.userMapper.toUserResponse(existingUser);
+        Set<Role> updatedRoles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
+        existingUser.setRoles(updatedRoles);
+
+        User savedUser = userRepository.save(existingUser);
+        return userMapper.toUserResponse(savedUser);
     }
 
     @Override
