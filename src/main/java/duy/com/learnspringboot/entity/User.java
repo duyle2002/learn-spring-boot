@@ -8,9 +8,10 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Entity
@@ -27,4 +28,7 @@ public class User {
 
     @ManyToMany
     Set<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    Set<RefreshToken> refreshTokens;
 }

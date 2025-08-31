@@ -12,3 +12,6 @@ spring:
 
 jwt:
   secretKey: "f42f6dfc37a0a26ae64ee17af1f9b6a7201bf5e060e0d24b46cc42b24ae4f7c6"
+  refresh-token-expiration: 604800000 # 7 days
+  access-token-expiration: 86400 # 1 day
+  cron-schedule-delete-expired-refresh-tokens: "0 0 0 * * ?" # every day at midnight

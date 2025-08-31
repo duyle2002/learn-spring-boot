@@ -1,15 +1,14 @@
 package duy.com.learnspringboot.dto.request.authentication;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class VerifyTokenRequest {
-    String accessToken;
+public class RefreshTokenRequest {
+    private String refreshToken;
 }

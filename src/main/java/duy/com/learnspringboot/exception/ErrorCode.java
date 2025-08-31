@@ -18,7 +18,11 @@ public enum ErrorCode {
 
     // role error code, from 3001 to 3999
     ROLE_ALREADY_EXISTS(3001, "Role already exists"),
-    ROLE_NOT_FOUND(3002, "Role not found");
+    ROLE_NOT_FOUND(3002, "Role not found"),
+
+    // refresh token code, from 4001 to 4999
+    REFRESH_TOKEN_NOT_FOUND(4001, "Refresh token not found"),
+    INVALID_REFRESH_TOKEN(4002, "Invalid refresh token");
 
 
     private int code;
