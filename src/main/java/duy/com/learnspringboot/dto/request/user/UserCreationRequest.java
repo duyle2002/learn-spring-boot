@@ -1,11 +1,11 @@
 package duy.com.learnspringboot.dto.request.user;
 
+import duy.com.learnspringboot.validator.DateOfBirthConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
@@ -22,5 +22,6 @@ public class UserCreationRequest {
     @Size(min = 8, message = "Password must be at least 8 characters")
     String password;
 
+    @DateOfBirthConstraint(min = 18)
     LocalDate dateOfBirth;
 }
