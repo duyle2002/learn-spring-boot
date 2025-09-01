@@ -2,10 +2,7 @@ package duy.com.learnspringboot.dto.response.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import duy.com.learnspringboot.entity.Role;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
@@ -15,6 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponse {
