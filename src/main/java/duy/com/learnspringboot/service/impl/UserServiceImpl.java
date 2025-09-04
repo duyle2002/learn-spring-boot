@@ -46,10 +46,10 @@ public class UserServiceImpl implements IUserService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        Role userRole = roleRepository.findById("USER")
-                .orElseGet(() -> roleRepository.save(Role.builder().name("USER").build()));
-
-        user.setRoles(Set.of(userRole));
+//        Role userRole = roleRepository.findById("USER")
+//                .orElseGet(() -> roleRepository.save(Role.builder().name("USER").build()));
+//
+//        user.setRoles(Set.of(userRole));
 
         User createdUser = userRepository.save(user);
         return userMapper.toUserResponse(createdUser);
