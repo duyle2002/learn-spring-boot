@@ -20,12 +20,22 @@ import lombok.experimental.FieldDefaults;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name ="id")
     UUID id;
 
+    @Column(name = "username", unique = true, nullable = false)
     String username;
+
+    @Column(name = "password", nullable = false)
     String password;
+
+    @Column(name = "first_name", nullable = false)
     String firstName;
+
+    @Column(name = "last_name", nullable = false)
     String lastName;
+
+    @Column(name = "date_of_birth", nullable = false)
     LocalDate dateOfBirth;
 
     @ManyToMany

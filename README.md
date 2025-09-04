@@ -9,10 +9,12 @@ This is a simple Spring Boot application built with version **3.5.4**, using **M
 - Spring Data JPA
 - Hibernate
 - Maven
-- PostgreSQL
+- MySQL
 - Lombok
 - Swagger
 - Spring Web (REST API)
+- JUnit & Mockito (Testing)
+- H2 Database (for testing)
 
 ## 🚀 Getting Started
 
