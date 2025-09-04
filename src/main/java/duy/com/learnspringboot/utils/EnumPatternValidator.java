@@ -1,13 +1,14 @@
 package duy.com.learnspringboot.utils;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 public class EnumPatternValidator implements ConstraintValidator<EnumPattern, Enum<?>> {
     private Pattern pattern;
+
     @Override
     public void initialize(EnumPattern enumPattern) {
         try {

@@ -1,19 +1,21 @@
 package duy.com.learnspringboot.controller;
 
-import duy.com.learnspringboot.dto.request.permission.CreatePermissionRequest;
-import duy.com.learnspringboot.dto.response.ApiResponse;
-import duy.com.learnspringboot.dto.response.permission.PermissionResponse;
-import duy.com.learnspringboot.service.IPermissionService;
+import java.util.List;
+
 import duy.com.learnspringboot.utils.SecurityExpressions;
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import duy.com.learnspringboot.dto.request.permission.CreatePermissionRequest;
+import duy.com.learnspringboot.dto.response.ApiResponse;
+import duy.com.learnspringboot.dto.response.permission.PermissionResponse;
+import duy.com.learnspringboot.service.IPermissionService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class PermissionController {
     IPermissionService permissionService;
 
     @PostMapping
-    public ApiResponse<PermissionResponse> create(@RequestBody @Valid CreatePermissionRequest createPermissionRequest){
+    public ApiResponse<PermissionResponse> create(@RequestBody @Valid CreatePermissionRequest createPermissionRequest) {
         PermissionResponse permissionResponse = permissionService.create(createPermissionRequest);
         return ApiResponse.<PermissionResponse>builder()
                 .code(HttpStatus.CREATED.value())
@@ -33,7 +35,7 @@ public class PermissionController {
     }
 
     @GetMapping
-    public ApiResponse<List<PermissionResponse>> findAll(){
+    public ApiResponse<List<PermissionResponse>> findAll() {
         List<PermissionResponse> permissionResponseList = permissionService.findAll();
         return ApiResponse.<List<PermissionResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -42,7 +44,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/{permissionName}")
-    public ApiResponse<Void> delete(@PathVariable String permissionName){
+    public ApiResponse<Void> delete(@PathVariable String permissionName) {
         permissionService.delete(permissionName);
 
         return ApiResponse.<Void>builder()

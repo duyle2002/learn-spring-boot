@@ -1,13 +1,14 @@
 package duy.com.learnspringboot.mapper;
 
-import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
-import duy.com.learnspringboot.dto.request.user.UserUpdateRequest;
-import duy.com.learnspringboot.dto.response.user.UserResponse;
-import duy.com.learnspringboot.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
+
+import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
+import duy.com.learnspringboot.dto.request.user.UserUpdateRequest;
+import duy.com.learnspringboot.dto.response.user.UserResponse;
+import duy.com.learnspringboot.entity.User;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {

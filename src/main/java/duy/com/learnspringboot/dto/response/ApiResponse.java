@@ -1,11 +1,13 @@
 package duy.com.learnspringboot.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @AllArgsConstructor

@@ -1,19 +1,21 @@
 package duy.com.learnspringboot.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
 import duy.com.learnspringboot.dto.request.role.CreateRoleRequest;
 import duy.com.learnspringboot.dto.response.ApiResponse;
 import duy.com.learnspringboot.dto.response.role.RoleResponse;
 import duy.com.learnspringboot.service.IRoleService;
 import duy.com.learnspringboot.utils.SecurityExpressions;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class RoleController {
     IRoleService roleService;
 
     @PostMapping
-    public ApiResponse<RoleResponse> create(@RequestBody @Valid CreateRoleRequest createRoleRequest){
+    public ApiResponse<RoleResponse> create(@RequestBody @Valid CreateRoleRequest createRoleRequest) {
         RoleResponse roleResponse = roleService.create(createRoleRequest);
         return ApiResponse.<RoleResponse>builder()
                 .code(HttpStatus.CREATED.value())
@@ -33,11 +35,9 @@ public class RoleController {
     }
 
     @GetMapping
-    public ApiResponse<List<RoleResponse>> findAll(){
+    public ApiResponse<List<RoleResponse>> findAll() {
         List<RoleResponse> roleResponseList = roleService.findAll();
-        return ApiResponse.<List<RoleResponse>>builder()
-                .data(roleResponseList)
-                .build();
+        return ApiResponse.<List<RoleResponse>>builder().data(roleResponseList).build();
     }
 
     @DeleteMapping("/{roleName}")

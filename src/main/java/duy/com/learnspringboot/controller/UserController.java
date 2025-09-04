@@ -1,22 +1,24 @@
 package duy.com.learnspringboot.controller;
 
+import java.util.List;
+import java.util.UUID;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
 import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
 import duy.com.learnspringboot.dto.request.user.UserUpdateRequest;
 import duy.com.learnspringboot.dto.response.ApiResponse;
 import duy.com.learnspringboot.dto.response.user.UserResponse;
 import duy.com.learnspringboot.service.IUserService;
 import duy.com.learnspringboot.utils.SecurityExpressions;
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @AllArgsConstructor
@@ -48,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-//    @PreAuthorize("hasAuthority('CREATE_POST')")
+    //    @PreAuthorize("hasAuthority('CREATE_POST')")
     public ApiResponse<UserResponse> getUser(@PathVariable UUID userId) {
         UserResponse userResponse = this.userService.getUserById(userId);
         return ApiResponse.<UserResponse>builder()
@@ -58,7 +60,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ApiResponse<UserResponse> updateUser(@PathVariable UUID userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+    public ApiResponse<UserResponse> updateUser(
+            @PathVariable UUID userId, @RequestBody UserUpdateRequest userUpdateRequest) {
         UserResponse updatedUser = this.userService.updateUser(userId, userUpdateRequest);
         return ApiResponse.<UserResponse>builder()
                 .code(HttpStatus.OK.value())

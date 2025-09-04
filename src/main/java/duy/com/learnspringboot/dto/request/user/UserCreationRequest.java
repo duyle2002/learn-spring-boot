@@ -1,11 +1,12 @@
 package duy.com.learnspringboot.dto.request.user;
 
-import duy.com.learnspringboot.validator.DateOfBirthConstraint;
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Size;
+
+import duy.com.learnspringboot.validator.DateOfBirthConstraint;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @Builder

@@ -1,5 +1,15 @@
 package duy.com.learnspringboot.service.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
 import duy.com.learnspringboot.dto.request.user.UserUpdateRequest;
 import duy.com.learnspringboot.dto.response.user.UserResponse;
@@ -15,15 +25,6 @@ import duy.com.learnspringboot.service.IUserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -46,10 +47,10 @@ public class UserServiceImpl implements IUserService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-//        Role userRole = roleRepository.findById("USER")
-//                .orElseGet(() -> roleRepository.save(Role.builder().name("USER").build()));
-//
-//        user.setRoles(Set.of(userRole));
+        //        Role userRole = roleRepository.findById("USER")
+        //                .orElseGet(() -> roleRepository.save(Role.builder().name("USER").build()));
+        //
+        //        user.setRoles(Set.of(userRole));
 
         User createdUser = userRepository.save(user);
         return userMapper.toUserResponse(createdUser);
@@ -57,19 +58,23 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<UserResponse> getAllUsers() {
-        return this.userRepository.findAll().stream().map(this.userMapper::toUserResponse).toList();
+        return this.userRepository.findAll().stream()
+                .map(this.userMapper::toUserResponse)
+                .toList();
     }
 
     @Override
     public UserResponse getUserById(UUID userId) {
-        User user = this.userRepository.findById(userId)
+        User user = this.userRepository
+                .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
         return this.userMapper.toUserResponse(user);
     }
 
     @Override
     public UserResponse updateUser(UUID userId, UserUpdateRequest request) {
-        User existingUser = userRepository.findById(userId)
+        User existingUser = userRepository
+                .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         userMapper.updateUser(existingUser, request);
@@ -83,7 +88,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteUser(UUID userId) {
-        User existingUser = this.userRepository.findById(userId)
+        User existingUser = this.userRepository
+                .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
         this.userRepository.delete(existingUser);
     }
@@ -94,7 +100,8 @@ public class UserServiceImpl implements IUserService {
         Authentication authentication = securityContext.getAuthentication();
         String username = authentication.getName();
 
-        User user = this.userRepository.findByUsername(username)
+        User user = this.userRepository
+                .findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         return this.userMapper.toUserResponse(user);

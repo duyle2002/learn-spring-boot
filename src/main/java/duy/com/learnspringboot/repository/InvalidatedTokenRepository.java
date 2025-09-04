@@ -1,11 +1,11 @@
 package duy.com.learnspringboot.repository;
 
-import duy.com.learnspringboot.entity.InvalidatedToken;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
+import duy.com.learnspringboot.entity.InvalidatedToken;
 
 @Repository
-public interface InvalidatedTokenRepository extends JpaRepository<InvalidatedToken, UUID> {
-}
+public interface InvalidatedTokenRepository extends JpaRepository<InvalidatedToken, UUID> {}

@@ -1,14 +1,26 @@
 package duy.com.learnspringboot.service.impl;
 
+import java.text.ParseException;
+import java.time.Instant;
+import java.util.Date;
+import java.util.StringJoiner;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import duy.com.learnspringboot.constant.TimeConstant;
+
 import duy.com.learnspringboot.dto.request.authentication.AuthenticationRequest;
-import duy.com.learnspringboot.dto.request.authentication.LogoutRequest;
 import duy.com.learnspringboot.dto.request.authentication.IntrospectTokenRequest;
+import duy.com.learnspringboot.dto.request.authentication.LogoutRequest;
 import duy.com.learnspringboot.dto.request.authentication.RefreshTokenRequest;
 import duy.com.learnspringboot.dto.response.authentication.AuthenticationResponse;
 import duy.com.learnspringboot.dto.response.authentication.IntrospectResponse;
@@ -23,21 +35,7 @@ import duy.com.learnspringboot.repository.InvalidatedTokenRepository;
 import duy.com.learnspringboot.repository.UserRepository;
 import duy.com.learnspringboot.service.IAuthenticationService;
 import duy.com.learnspringboot.service.IRefreshTokenService;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.text.ParseException;
-import java.time.Instant;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +56,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-        User user = userRepository.findByUsername(authenticationRequest.getUsername().toLowerCase())
+        User user = userRepository
+                .findByUsername(authenticationRequest.getUsername().toLowerCase())
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         String userPassword = user.getPassword();
@@ -79,7 +78,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
 
     @Override
-    public IntrospectResponse introspectToken(IntrospectTokenRequest introspectTokenRequest) throws JOSEException, ParseException {
+    public IntrospectResponse introspectToken(IntrospectTokenRequest introspectTokenRequest)
+            throws JOSEException, ParseException {
         String token = introspectTokenRequest.getAccessToken();
 
         var isValid = true;
@@ -89,9 +89,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             isValid = false;
         }
 
-        return IntrospectResponse.builder()
-                .valid(isValid)
-                .build();
+        return IntrospectResponse.builder().valid(isValid).build();
     }
 
     @Override
@@ -102,14 +100,16 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
         InvalidatedToken invalidatedToken = new InvalidatedToken();
         invalidatedToken.setId(UUID.fromString(jwtTokenId));
-        invalidatedToken.setExpiryDate(signedJWT.getJWTClaimsSet().getExpirationTime().toInstant());
+        invalidatedToken.setExpiryDate(
+                signedJWT.getJWTClaimsSet().getExpirationTime().toInstant());
 
         invalidatedTokenRepository.save(invalidatedToken);
     }
 
     @Override
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-        RefreshToken refreshToken = refreshTokenService.findActiveRefreshTokenByToken(refreshTokenRequest.getRefreshToken())
+        RefreshToken refreshToken = refreshTokenService
+                .findActiveRefreshTokenByToken(refreshTokenRequest.getRefreshToken())
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
 
         if (refreshTokenService.isTokenValid(refreshToken)) {

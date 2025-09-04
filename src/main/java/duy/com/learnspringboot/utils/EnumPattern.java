@@ -1,11 +1,11 @@
 package duy.com.learnspringboot.utils;
 
-import jakarta.validation.Constraint;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import jakarta.validation.Constraint;
 
 @Documented
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})

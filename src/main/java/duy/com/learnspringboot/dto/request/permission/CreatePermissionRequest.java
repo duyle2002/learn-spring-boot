@@ -1,6 +1,7 @@
 package duy.com.learnspringboot.dto.request.permission;
 
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,5 +13,6 @@ import lombok.experimental.FieldDefaults;
 public class CreatePermissionRequest {
     @NotBlank
     String name;
+
     String description;
 }
