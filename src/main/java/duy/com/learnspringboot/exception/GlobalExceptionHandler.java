@@ -1,7 +1,8 @@
 package duy.com.learnspringboot.exception;
 
-import duy.com.learnspringboot.dto.response.ApiResponse;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.HashMap;
-import java.util.Map;
+import duy.com.learnspringboot.dto.response.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
@@ -38,7 +39,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors()
+        ex.getBindingResult()
+                .getFieldErrors()
                 .forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
 
         ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
@@ -55,7 +57,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ApiResponse<?>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+    public ResponseEntity<ApiResponse<?>> handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException ex) {
         return buildErrorResponse(ex, ErrorCode.METHOD_NOT_ALLOWED, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -69,13 +72,14 @@ public class GlobalExceptionHandler {
      */
     private ResponseEntity<ApiResponse<?>> buildErrorResponse(Exception ex, ErrorCode errorCode, HttpStatus status) {
         // Error log with stack trace for developers
-        log.error("Exception caught [{}]: Code={}, Message={}, Details={}",
+        log.error(
+                "Exception caught [{}]: Code={}, Message={}, Details={}",
                 ex.getClass().getSimpleName(),
                 errorCode.getCode(),
                 errorCode.getMessage(),
                 ex.getMessage(),
                 ex // logs stack trace
-        );
+                );
 
         // Build API response for clients
         ApiResponse<?> apiResponse = ApiResponse.builder()

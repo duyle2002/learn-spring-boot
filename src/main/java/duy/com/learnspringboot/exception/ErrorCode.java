@@ -24,9 +24,9 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(4001, "Refresh token not found"),
     INVALID_REFRESH_TOKEN(4002, "Invalid refresh token");
 
-
     private int code;
     private String message;
+
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;

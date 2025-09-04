@@ -1,18 +1,20 @@
 package duy.com.learnspringboot.service.impl;
 
-import duy.com.learnspringboot.entity.RefreshToken;
-import duy.com.learnspringboot.entity.User;
-import duy.com.learnspringboot.repository.RefreshTokenRepository;
-import duy.com.learnspringboot.service.IRefreshTokenService;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Optional;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import duy.com.learnspringboot.entity.RefreshToken;
+import duy.com.learnspringboot.entity.User;
+import duy.com.learnspringboot.repository.RefreshTokenRepository;
+import duy.com.learnspringboot.service.IRefreshTokenService;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -43,11 +45,10 @@ public class RefreshTokenServiceImpl implements IRefreshTokenService {
 
     @Override
     public void revokeRefreshToken(String token) {
-        refreshTokenRepository.findByToken(token)
-                .ifPresent(refreshToken -> {
-                    refreshToken.setRevoked(true);
-                    refreshTokenRepository.save(refreshToken);
-                });
+        refreshTokenRepository.findByToken(token).ifPresent(refreshToken -> {
+            refreshToken.setRevoked(true);
+            refreshTokenRepository.save(refreshToken);
+        });
     }
 
     @Override

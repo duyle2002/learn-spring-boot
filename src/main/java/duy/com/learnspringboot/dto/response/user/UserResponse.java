@@ -1,13 +1,14 @@
 package duy.com.learnspringboot.dto.response.user;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import duy.com.learnspringboot.entity.Role;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import duy.com.learnspringboot.entity.Role;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @AllArgsConstructor

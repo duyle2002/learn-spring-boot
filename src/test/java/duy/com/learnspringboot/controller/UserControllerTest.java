@@ -1,10 +1,12 @@
 package duy.com.learnspringboot.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
-import duy.com.learnspringboot.dto.response.user.UserResponse;
-import duy.com.learnspringboot.exception.ErrorCode;
-import duy.com.learnspringboot.service.IUserService;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,12 +21,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.UUID;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import duy.com.learnspringboot.dto.request.user.UserCreationRequest;
+import duy.com.learnspringboot.dto.response.user.UserResponse;
+import duy.com.learnspringboot.exception.ErrorCode;
+import duy.com.learnspringboot.service.IUserService;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -72,12 +74,10 @@ public class UserControllerTest {
 
         when(userService.createUser(any())).thenReturn(userResponse);
 
-        mockMvc.perform(
-                MockMvcRequestBuilders
-                        .post("/users")
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(userCreationRequestStr)
-        ).andExpect(MockMvcResultMatchers.status().isOk())
+                        .content(userCreationRequestStr))
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value(HttpStatus.CREATED.value()))
                 .andExpect(MockMvcResultMatchers.jsonPath("data.username").value(userResponse.getUsername()));
     }
@@ -87,12 +87,10 @@ public class UserControllerTest {
         userCreationRequest.setUsername("abc");
         String userCreationRequestStr = objectMapper.writeValueAsString(userCreationRequest);
 
-        mockMvc.perform(
-                MockMvcRequestBuilders
-                        .post("/users")
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(userCreationRequestStr)
-        ).andExpect(MockMvcResultMatchers.status().isBadRequest())
+                        .content(userCreationRequestStr))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value(ErrorCode.VALIDATION_ERROR.getCode()));
     }
 }

@@ -1,13 +1,10 @@
 package duy.com.learnspringboot.configuration;
 
-import com.nimbusds.jose.JOSEException;
-import duy.com.learnspringboot.dto.request.authentication.IntrospectTokenRequest;
-import duy.com.learnspringboot.service.IAuthenticationService;
+import java.text.ParseException;
+import javax.crypto.spec.SecretKeySpec;
+
 import jakarta.annotation.PostConstruct;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -16,8 +13,14 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.text.ParseException;
+import com.nimbusds.jose.JOSEException;
+
+import duy.com.learnspringboot.dto.request.authentication.IntrospectTokenRequest;
+import duy.com.learnspringboot.service.IAuthenticationService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 
 @Component
 @RequiredArgsConstructor
@@ -38,8 +41,7 @@ public class CustomJwtDecoder implements JwtDecoder {
     @PostConstruct
     void initializeDecoder() {
         SecretKeySpec secretKeySpec = new SecretKeySpec(jwtSecret.getBytes(), ALGORITHM);
-        this.nimbusJwtDecoder = NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
+        this.nimbusJwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)
                 .macAlgorithm(MAC_ALGORITHM)
                 .build();
     }

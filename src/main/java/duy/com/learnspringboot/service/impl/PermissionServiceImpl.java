@@ -1,5 +1,9 @@
 package duy.com.learnspringboot.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import duy.com.learnspringboot.dto.request.permission.CreatePermissionRequest;
 import duy.com.learnspringboot.dto.response.permission.PermissionResponse;
 import duy.com.learnspringboot.entity.Permission;
@@ -13,9 +17,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +41,15 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     public List<PermissionResponse> findAll() {
-        return permissionRepository.findAll().stream().map(permissionMapper::toPermissionResponse).toList();
+        return permissionRepository.findAll().stream()
+                .map(permissionMapper::toPermissionResponse)
+                .toList();
     }
 
     @Override
     public void delete(String permissionName) {
-        var permission = permissionRepository.findById(permissionName)
+        var permission = permissionRepository
+                .findById(permissionName)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.PERMISSION_NOT_FOUND));
         permissionRepository.deleteById(permission.getName());
     }

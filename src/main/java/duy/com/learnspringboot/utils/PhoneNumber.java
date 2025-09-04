@@ -1,9 +1,9 @@
 package duy.com.learnspringboot.utils;
 
+import java.lang.annotation.*;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-
-import java.lang.annotation.*;
 
 @Documented
 @Constraint(validatedBy = PhoneValidator.class)
@@ -11,6 +11,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PhoneNumber {
     String message() default "Invalid phone number format";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

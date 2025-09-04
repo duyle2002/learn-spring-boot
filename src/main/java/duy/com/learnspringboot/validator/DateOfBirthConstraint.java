@@ -1,8 +1,8 @@
 package duy.com.learnspringboot.validator;
 
-import jakarta.validation.Constraint;
-
 import java.lang.annotation.*;
+
+import jakarta.validation.Constraint;
 
 @Documented
 @Target({ElementType.FIELD, ElementType.PARAMETER})
@@ -12,6 +12,7 @@ public @interface DateOfBirthConstraint {
     String message() default "Invalid date of birth";
 
     int min();
+
     Class<?>[] groups() default {};
 
     Class<? extends java.lang.annotation.Annotation>[] payload() default {};

@@ -1,5 +1,10 @@
 package duy.com.learnspringboot.service.impl;
 
+import java.util.HashSet;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import duy.com.learnspringboot.dto.request.role.CreateRoleRequest;
 import duy.com.learnspringboot.dto.response.role.RoleResponse;
 import duy.com.learnspringboot.entity.Permission;
@@ -14,10 +19,6 @@ import duy.com.learnspringboot.service.IRoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,8 +53,9 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public void delete(String roleName) {
-        var role = roleRepository.findById(roleName)
-                        .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.ROLE_NOT_FOUND));
+        var role = roleRepository
+                .findById(roleName)
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.ROLE_NOT_FOUND));
 
         roleRepository.deleteById(roleName);
     }
