@@ -38,7 +38,6 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Clear any existing mock interactions
         Mockito.clearInvocations(userRepository);
         Mockito.reset(userRepository);
 

@@ -2,17 +2,17 @@ server:
   port: 8080
 spring:
   datasource:
-    url: ${DB_URL:}
-    username: ${DB_USERNAME:}
-    password: ${DB_PASSWORD:}
+    url: "jdbc:mysql://localhost:3306/learn-spring-boot"
+    username: root
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
-      hibernate:
-          ddl-auto: update
-      show-sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 jwt:
-  secretKey: ${JWT_SECRET_KEY:}
+  secretKey: "f42f6dfc37a0a26ae64ee17af1f9b6a7201bf5e060e0d24b46cc42b24ae4f7c6"
   refresh-token-expiration: 604800000 # 7 days
   access-token-expiration: 86400 # 1 day
   cron-schedule-delete-expired-refresh-tokens: "0 0 0 * * ?" # every day at midnight
